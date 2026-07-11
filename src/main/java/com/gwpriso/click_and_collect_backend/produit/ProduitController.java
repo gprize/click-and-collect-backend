@@ -18,8 +18,10 @@ public class ProduitController {
     private final ProduitService produitService;
 
     @GetMapping
-    public List<ProduitResponse> findByMagasin(@RequestParam UUID magasinId) {
-        return produitService.findByMagasin(magasinId);
+    public List<ProduitResponse> findByMagasin(
+            @RequestParam UUID magasinId,
+            @RequestParam(required = false) String recherche) {
+        return produitService.findByMagasin(magasinId, recherche);
     }
 
     @GetMapping("/{id}")

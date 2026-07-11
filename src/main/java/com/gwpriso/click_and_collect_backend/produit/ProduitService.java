@@ -61,4 +61,14 @@ public class ProduitService {
         return produitRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Produit introuvable : " + id));
     }
+
+    public List<ProduitResponse> findByMagasin(UUID magasinId, String recherche) {
+        List<Produit> produits = (recherche != null && !recherche.isBlank())
+                ? produitRepository.findByMagasinIdAndNomContainingIgnoreCase(magasinId, recherche.trim())
+                : produitRepository.findByMagasinId(magasinId);
+
+        return produits.stream()
+                .map(ProduitResponse::from)
+                .toList();
+    }
 }
