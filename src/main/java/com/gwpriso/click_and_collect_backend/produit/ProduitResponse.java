@@ -8,16 +8,15 @@ public record ProduitResponse(
         UUID magasinId,
         String nom,
         BigDecimal prix,
-        Integer quantiteStock
+        boolean disponible
 ) {
-
     public static ProduitResponse from(Produit produit) {
         return new ProduitResponse(
                 produit.getId(),
                 produit.getMagasin().getId(),
                 produit.getNom(),
                 produit.getPrix(),
-                produit.getQuantiteStock()
+                produit.getQuantiteStock() > 0
         );
     }
 }
