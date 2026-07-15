@@ -1,11 +1,14 @@
 package com.gwpriso.click_and_collect_backend.utilisateur;
 
-import jakarta.validation.Valid;
+import com.gwpriso.click_and_collect_backend.security.AccessGuard;
+import com.gwpriso.click_and_collect_backend.security.AuthenticatedUser;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
 import java.util.UUID;
 
 @RestController
@@ -14,20 +17,11 @@ import java.util.UUID;
 public class UtilisateurController {
 
     private final UtilisateurService utilisateurService;
+    private final AccessGuard accessGuard;
 
     @GetMapping("/{id}")
-    public UtilisateurResponse findById(@PathVariable UUID id) {
+    public UtilisateurResponse findById(@AuthenticationPrincipal AuthenticatedUser user, @PathVariable UUID id) {
+        accessGuard.verifierProprietaire(user, id);
         return utilisateurService.findById(id);
-    }
-
-    @PostMapping
-    public ResponseEntity<UtilisateurResponse> create(@Valid @RequestBody UtilisateurRequest request) {
-        UtilisateurResponse response = utilisateurService.create(request);
-        return ResponseEntity.created(URI.create("/api/utilisateurs/" + response.id())).body(response);
-    }
-
-    @GetMapping
-    public UtilisateurResponse findByEmail(@RequestParam String email) {
-        return utilisateurService.findByEmail(email);
     }
 }

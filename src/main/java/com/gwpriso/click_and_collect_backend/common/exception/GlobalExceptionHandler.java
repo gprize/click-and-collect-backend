@@ -1,5 +1,7 @@
 package com.gwpriso.click_and_collect_backend.common.exception;
 
+import com.gwpriso.click_and_collect_backend.security.AccesRefuseException;
+import com.gwpriso.click_and_collect_backend.security.AuthenticationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -68,5 +70,17 @@ public class GlobalExceptionHandler {
                 "Une erreur inattendue est survenue"
         );
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorResponse> handleAuthentication(AuthenticationException ex) {
+        ErrorResponse body = ErrorResponse.of(HttpStatus.UNAUTHORIZED.value(), ex.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(body);
+    }
+
+    @ExceptionHandler(AccesRefuseException.class)
+    public ResponseEntity<ErrorResponse> handleAccesRefuse(AccesRefuseException ex) {
+        ErrorResponse body = ErrorResponse.of(HttpStatus.FORBIDDEN.value(), ex.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(body);
     }
 }
