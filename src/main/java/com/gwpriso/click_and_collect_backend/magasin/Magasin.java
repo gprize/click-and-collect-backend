@@ -27,6 +27,15 @@ public class Magasin {
     @Column(nullable = false, length = 255)
     private String adresse;
 
+    @Column(name = "couleur_primaire", nullable = false, length = 7)
+    private String couleurPrimaire = "#3B6B3E";
+
+    @Column(name = "couleur_secondaire", nullable = false, length = 7)
+    private String couleurSecondaire = "#B23A2E";
+
+    @Column(name = "logo_url", length = 500)
+    private String logoUrl;
+
     @Column(name = "cree_le", nullable = false, updatable = false)
     private LocalDateTime creeLe;
 

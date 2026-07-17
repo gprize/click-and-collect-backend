@@ -36,6 +36,9 @@ public class MagasinService {
         Magasin magasin = getMagasinOrThrow(id);
         magasin.setNom(request.nom());
         magasin.setAdresse(request.adresse());
+        if (request.couleurPrimaire() != null) magasin.setCouleurPrimaire(request.couleurPrimaire());
+        if (request.couleurSecondaire() != null) magasin.setCouleurSecondaire(request.couleurSecondaire());
+        magasin.setLogoUrl(request.logoUrl());
         return MagasinResponse.from(magasin);
     }
 
