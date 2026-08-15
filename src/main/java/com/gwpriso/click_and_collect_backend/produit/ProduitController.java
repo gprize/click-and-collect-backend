@@ -65,4 +65,13 @@ public class ProduitController {
         produitService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/import")
+    public ImportResponse importerStock(
+            @AuthenticationPrincipal AuthenticatedUser user,
+            @Valid @RequestBody ImportRequest request) {
+        accessGuard.verifierStaff(user);
+        accessGuard.verifierMagasin(user, request.magasinId());
+        return produitService.importerStock(request.magasinId(), request.lignes());
+    }
 }

@@ -71,4 +71,34 @@ public class ProduitService {
                 .map(ProduitResponse::from)
                 .toList();
     }
+
+    @Transactional
+    public ImportResponse importerStock(UUID magasinId, List<ImportLigneRequest> lignes) {
+        Magasin magasin = magasinRepository.findById(magasinId)
+                .orElseThrow(() -> new EntityNotFoundException("Magasin introuvable : " + magasinId));
+
+        int crees = 0;
+        int misAJour = 0;
+
+        for (ImportLigneRequest ligne : lignes) {
+            Produit produit = produitRepository.findByNomAndMagasinId(ligne.nom(), magasinId)
+                    .orElse(null);
+
+            if (produit == null) {
+                produit = new Produit();
+                produit.setMagasin(magasin);
+                produit.setNom(ligne.nom());
+                produit.setPrix(ligne.prix());
+                produit.setQuantiteStock(ligne.quantiteStock());
+                produitRepository.save(produit);
+                crees++;
+            } else {
+                produit.setPrix(ligne.prix());
+                produit.setQuantiteStock(ligne.quantiteStock());
+                misAJour++;
+            }
+        }
+
+        return new ImportResponse(crees, misAJour);
+    }
 }
