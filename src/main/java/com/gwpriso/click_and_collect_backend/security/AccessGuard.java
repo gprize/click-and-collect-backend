@@ -24,4 +24,10 @@ public class AccessGuard {
             throw new AccesRefuseException("Accès refusé à cette ressource");
         }
     }
+
+    public void verifierAdminMagasin(AuthenticatedUser user) {
+        if (user.type() != TypeUtilisateur.STAFF || !"ADMIN_MAGASIN".equals(user.role())) {
+            throw new AccesRefuseException("Réservé aux administrateurs du magasin");
+        }
+    }
 }
